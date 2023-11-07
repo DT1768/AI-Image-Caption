@@ -1,0 +1,1 @@
+export const CAPTION_GENERATE_API = process.env.REACT_APP_CAPTION_GENERATE_API

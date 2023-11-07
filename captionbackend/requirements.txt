@@ -1,0 +1,6 @@
+Flask
+Requests
+transformers
+torch
+pillow
+flask_cors
