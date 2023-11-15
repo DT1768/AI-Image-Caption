@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const { check } = require('express-validator');
+const { body, check } = require('express-validator');
 
 const { signup, signin, signout, isSignedIn } = require('../controllers/auth');
 const user = require('../models/user');
@@ -12,7 +12,7 @@ router.post(
     [
         check("name", "name should be atleast 1 characters").isLength({ min: 1 }),
         check("email", "email is required").isEmail().normalizeEmail(),
-        body(email).custom((value) => {
+        body("email").custom((value) => {
             return user.find(
                 { email: value }
             ).then(userDoc => {

@@ -15,18 +15,17 @@ exports.signup = (req, res) => {
     }
 
     const user = new User(req.body);
-    user.save((err, user) => {
-        if(err) {
-            return res.status(400).json({
-                err: "Not able to save user in DB"
-            });
-        }
-        res.json({
+    user.save().then((user) => {
+        return res.json({
             name: user.name,
             email: user.email,
             id: user._id
         });
-    });
+    }).catch(err => {
+        return res.status(400).json({
+            err: "NOT able to save user in DB"
+        });
+    })
 };
 
 //signin controller
@@ -41,12 +40,7 @@ exports.signin = (req, res) => {
         });
     }
 
-    User.findOne({ email }, (err, user) => {
-        if(err || !user) {
-            return res.status(400).json({
-                error: "User email does not exist"
-            });
-        }
+    User.findOne({ email: email }).then((user) => {
 
         if(!user.authenticate(password)) {
             return res.status(401).json({
@@ -63,6 +57,10 @@ exports.signin = (req, res) => {
         //send response to frontend
         const { _id, name, email } = user;
         return res.json({ token, user: { _id, name, email} });
+    }).catch(() => {
+        return res.status(400).json({
+            err: "Email does not exist"
+        });
     });
 };
 

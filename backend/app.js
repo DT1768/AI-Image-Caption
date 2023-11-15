@@ -17,11 +17,10 @@ const cors = require("cors");
 mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
 }).then(() => {
     console.log("DB CONNECTED");
-}).catch(() => {
-    console.log("OOPSIE! DB NOT CONNECTED");
+}).catch((err) => {
+    console.log(`OOPSIE! DB NOT CONNECTED. n${err}`);
 });
 
 //Middlewares
