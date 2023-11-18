@@ -5,6 +5,7 @@ const express = require("express");
 
 //My Routes
 const authRoutes = require("./routes/auth");
+const imageRoutes = require("./routes/image");
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(cors());
 
 //Routes
 app.use('/api', authRoutes);
+app.use('/api', imageRoutes);
 
 //Port
 const port = process.env.PORT || 8000;
