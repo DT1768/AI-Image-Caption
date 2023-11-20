@@ -1,1 +1,2 @@
-export const CAPTION_GENERATE_API = process.env.REACT_APP_CAPTION_GENERATE_API
+export const CAPTION_GENERATE_API = process.env.REACT_APP_CAPTION_GENERATE_API;
+export const BACKEND_API = process.env.REACT_APP_BACKEND_API;

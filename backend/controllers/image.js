@@ -42,7 +42,12 @@ exports.getImagesByUser = (req, res) => {
     Image.find({ user: req.profile._id })
     .exec()
     .then((images) => {
-        return res.json(images);
+        if(images.length != 0){
+            return res.json(images);
+        }
+        else{
+            return res.status(204);
+        }
     })
     .catch(() => {
         return res.status(400).json({
@@ -58,12 +63,17 @@ exports.searchImageByCaption = (req, res) => {
         $text: {$search: req.body.search}
     })
     .exec()
-    .then((images) => {
+.then((images) => {
+    if(images.length != 0){
         return res.json(images);
+    }
+    else{
+        return res.status(204);
+    }
     })
     .catch(() => {
         return res.status(400).json({
-            error: "Images not found in DB"
+            error: "Bad Request."
         });
     });
 };
