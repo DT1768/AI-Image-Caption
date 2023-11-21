@@ -1,9 +1,13 @@
 import React from 'react';
 
 import "../styles.css";
+import Header from './Header';
+import Footer from './Footer';
 
 const Base = ({
-    className,
+    title = "",
+    description = "",
+    className = 'bg-dark text-white p-4',
     children
 }) => {
 
@@ -11,19 +15,15 @@ const Base = ({
 
     return(
         <div>
-            <div className="logohead text-center">
-                <a href="/" className="navbar-brand">
-                    {/*<img src="" width="100" height="100" alt="" className="d-inline-block align-middle" />*/}
-                    <span className="text align-middle">AI-Image Captioning</span>
-                </a>
+            <Header />
+            <div className='container-fluid text-light text-center'>
+                <h2 className='display-4'>{title}</h2>
+                <p className='lead'>{description}</p>
             </div>
             <div className={className}>
                 {children}
             </div>
-            <div className="container text-black text-center py-3">
-                <br />
-                <h5>This will be footer.</h5>
-            </div>
+            <Footer />
         </div>
     );
 }

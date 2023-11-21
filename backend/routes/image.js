@@ -16,7 +16,7 @@ router.post("/image/create/:userId", isSignedIn, isAuthenticated, createImage);
 
 //get images route
 router.get("/images/:userId", isSignedIn, isAuthenticated, getImagesByUser);
-router.get("/images/captionsearch/:userId", isSignedIn, isAuthenticated, searchImageByCaption);
+router.post("/images/captionsearch/:userId", isSignedIn, isAuthenticated, searchImageByCaption);
 
 
 module.exports = router;

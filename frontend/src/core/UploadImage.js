@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import AWS from "aws-sdk";
 import Base from "./Base";
 import { AWS_REGION, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_S3_BUCKET } from "../awsCredentials";
-import { generateCaption } from "./helper/captionapicall";
+import { generateCaption, saveImage } from "./helper/captionapicall";
+import { isAuthenticated } from "../auth/helper";
 
 const UploadImage = () => {
 
@@ -10,6 +11,7 @@ const UploadImage = () => {
     const [imageUrl, setImageUrl] = useState('');
     const [caption, setCaption] = useState('');
     const [loading, setLoading] = useState('');
+    const [saved, setSaved] = useState(false);
 
     const handleImageChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -54,7 +56,6 @@ const UploadImage = () => {
     };
 
     const handleGenerateCaption = () => {
-        
         setLoading("Generating Caption...");
 
         if (imageUrl) {
@@ -68,27 +69,78 @@ const UploadImage = () => {
         }
     };
 
+    const {user,token} = isAuthenticated();
+
+    const handleSaveCaption = (event) => {
+        setLoading("Saving Caption...");
+        event.preventDefault();
+        saveImage(user._id, token, imageUrl, caption)
+        .then(data => {
+            setLoading("Image Saved to collection.");
+            setSaved(true);
+            console.log(data);
+        })
+        .catch(
+            err => console.log(err)
+        )
+    };
+
+    const imageForm = () => {
+        return(
+            <div className="row">
+                <div className="col-md-4 offset-sm-4">
+                    {loading && <p className="text">{loading}</p>}
+                    <input className="btn" type="file" accept="image/png, image/jpeg" onChange={handleImageChange} />
+                    <br />
+                    <br />
+                    <button className="btn btn-warning col-12" onClick={handleUpload} disabled={imageUrl}>Upload Image</button>
+                    <br />
+                    <br />
+                    {imageUrl && (
+                        <img src={imageUrl} alt="Uploaded" style={{ maxHeight: "100%", maxWidth: "100%" }} />
+                    )}
+                    <br />
+                    <br />
+                    {imageUrl && (
+                        <button className="btn btn-warning col-12"  onClick={handleGenerateCaption} disabled={caption}>
+                            Generate Caption
+                        </button>
+                    )}
+                <div>
+                    {caption && captionDisplay()}
+                    <br />
+                    {caption && isAuthenticated() && (
+                        <button className="btn btn-warning col-12" onClick={handleSaveCaption} disabled={saved}>
+                            Save Caption
+                        </button>
+                    )}
+                </div>
+                </div>
+            </div>
+        );
+    }
+
+    const captionDisplay = () => {
+        return(
+            <div className="row">
+                <div className="col">
+                    <br />
+                    <div className="text-light">
+                        Caption:
+                    </div>
+                    <div className="text">
+                        {caption}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     return (
     <div>
-        <Base>
-                <div>
-                    <div className="alert alert-success">
-                        {loading}
-                    </div>
-                    <div>
-                        <input type="file" accept="image/png, image/jpeg" onChange={handleImageChange} />
-                        <button onClick={handleUpload}>Upload Image</button>
-                    </div>
-                    {imageUrl && <img src={imageUrl} alt="Uploaded" />}
-                    <div>
-                        {imageUrl && (
-                            <button onClick={handleGenerateCaption} disabled={caption}>
-                                Generate Caption
-                            </button>
-                        )}
-                    </div>
-                    {caption && <p>Caption: {caption}</p>}
-                </div>
+        <Base title="Upload Image Here" description="Caption will be generated using gpt-2 model.">
+            
+            {imageForm()}
         </Base>
     </div>
     );

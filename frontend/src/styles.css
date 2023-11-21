@@ -1,7 +1,64 @@
+.btn {
+    color: #000000;
+    background-color: #39FF14;
+    border-color: #39FF14;
+    border-radius: 8px;
+}
+
+.jumbotron {
+    color: #24519a;
+    background-color: #019ada;
+    border-color: #019ada;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.nav :hover {
+    border: none;
+    background-color: #f8f9fa;
+}
+
+body {
+    background: #212529;
+    margin-bottom: 50px;
+}
+
 .nav {
-    background-color: #ffffff;
+    background-color: #212529;
     font-family: 'Jost', sans-serif;
     font-size: 1.1rem;
     line-height: 1.5;
 
+}
+
+.navbar {
+    color: #39FF14;
+    background-color: #212529;
+    font-family: 'Jost', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.5;
+
+}
+
+footer {
+    font-size: 1.1rem;
+    position: relative;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    margin-bottom: 0px;
+    font-family: 'Jost', sans-serif;
+}
+
+
+.img {
+    border-radius: 10px;
+}
+
+.nav li .nav-link {
+    color: #39FF14;
+}
+
+.text {
+    color: #39FF14;
 }
