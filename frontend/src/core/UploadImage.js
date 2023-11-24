@@ -3,15 +3,19 @@ import AWS from "aws-sdk";
 import Base from "./Base";
 import { AWS_REGION, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_S3_BUCKET } from "../awsCredentials";
 import { generateCaption, saveImage } from "./helper/captionapicall";
-import { isAuthenticated } from "../auth/helper";
+import { isAuthenticated } from "../auth/helper/authapicall";
 
 const UploadImage = () => {
 
-    const [file,setFile] = useState(null);
+    const [file, setFile] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
     const [caption, setCaption] = useState('');
     const [loading, setLoading] = useState('');
     const [saved, setSaved] = useState(false);
+
+    const { user, token } = isAuthenticated();
+
+
 
     const handleImageChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -29,10 +33,15 @@ const UploadImage = () => {
                 secretAccessKey: AWS_SECRET_ACCESS_KEY,
             });
 
+
+            const timestamp = new Date().toISOString().replace(/[-T:]/g, "");
+
+            const key = isAuthenticated() ? `${user._id}/${timestamp}_${file.name}` : `general/${timestamp}_${file.name}`;
+
             const s3 = new AWS.S3();
             const params = {
                 Bucket: AWS_S3_BUCKET,
-                Key: file.name,
+                Key: key,
                 Body: file,
             };
 
@@ -50,7 +59,7 @@ const UploadImage = () => {
                 }
             });
         }
-        else{
+        else {
             setLoading("Please Select Image")
         }
     };
@@ -61,32 +70,32 @@ const UploadImage = () => {
         if (imageUrl) {
             // Make an API request to the Flask server to generate a caption
             generateCaption(imageUrl)
-            .then(data => {
+                .then(data => {
                     setLoading("Caption Generated");
                     console.log(data);
                     setCaption(data.caption);
-            })
+                })
         }
     };
 
-    const {user,token} = isAuthenticated();
+
 
     const handleSaveCaption = (event) => {
         setLoading("Saving Caption...");
         event.preventDefault();
         saveImage(user._id, token, imageUrl, caption)
-        .then(data => {
-            setLoading("Image Saved to collection.");
-            setSaved(true);
-            console.log(data);
-        })
-        .catch(
-            err => console.log(err)
-        )
+            .then(data => {
+                setLoading("Image Saved to collection.");
+                setSaved(true);
+                console.log(data);
+            })
+            .catch(
+                err => console.log(err)
+            )
     };
 
     const imageForm = () => {
-        return(
+        return (
             <div className="row">
                 <div className="col-md-4 offset-sm-4">
                     {loading && <p className="text">{loading}</p>}
@@ -97,31 +106,31 @@ const UploadImage = () => {
                     <br />
                     <br />
                     {imageUrl && (
-                        <img src={imageUrl} alt="Uploaded" style={{ maxHeight: "100%", maxWidth: "100%" }} />
+                        <img src={imageUrl} alt="Uploaded" width={"100%"} height={"100%"} style={{ maxHeight: "400px" }} />
                     )}
                     <br />
                     <br />
                     {imageUrl && (
-                        <button className="btn btn-warning col-12"  onClick={handleGenerateCaption} disabled={caption}>
+                        <button className="btn btn-warning col-12" onClick={handleGenerateCaption} disabled={caption}>
                             Generate Caption
                         </button>
                     )}
-                <div>
-                    {caption && captionDisplay()}
-                    <br />
-                    {caption && isAuthenticated() && (
-                        <button className="btn btn-warning col-12" onClick={handleSaveCaption} disabled={saved}>
-                            Save Caption
-                        </button>
-                    )}
-                </div>
+                    <div>
+                        {caption && captionDisplay()}
+                        <br />
+                        {caption && isAuthenticated() && (
+                            <button className="btn btn-warning col-12" onClick={handleSaveCaption} disabled={saved}>
+                                Save Caption
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         );
     }
 
     const captionDisplay = () => {
-        return(
+        return (
             <div className="row">
                 <div className="col">
                     <br />
@@ -137,12 +146,12 @@ const UploadImage = () => {
     }
 
     return (
-    <div>
-        <Base title="Upload Image Here" description="Caption will be generated using gpt-2 model.">
-            
-            {imageForm()}
-        </Base>
-    </div>
+        <div>
+            <Base title="Upload Image Here" description="Caption will be generated using gpt-2 model.">
+
+                {imageForm()}
+            </Base>
+        </div>
     );
 }
 

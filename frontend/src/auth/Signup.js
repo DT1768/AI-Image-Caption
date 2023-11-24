@@ -1,9 +1,9 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import Base from '../core/Base';
 import { Link } from 'react-router-dom';
-import { signup } from '../auth/helper';
+import { signup } from './helper/authapicall';
 
-const Signup = ()  => {
+const Signup = () => {
 
     const [values, setValues] = useState({
         name: "",
@@ -14,42 +14,42 @@ const Signup = ()  => {
         success: false
     });
 
-    const {name, email, password, confirmpassword, error, success} = values;
+    const { name, email, password, confirmpassword, error, success } = values;
 
     const handleChange = name => event => {
-        setValues({...values, error: false, [name]: event.target.value});
+        setValues({ ...values, error: false, [name]: event.target.value });
     };
 
     const onSubmit = event => {
         event.preventDefault();
-        setValues({...values, error: false});
-        if(password !== confirmpassword){
-            setValues({...values, error: "Password and Confirm Password do not match", success: false});
+        setValues({ ...values, error: false });
+        if (password !== confirmpassword) {
+            setValues({ ...values, error: "Password and Confirm Password do not match", success: false });
         }
-        else{
-            signup({name, email, password, confirmpassword})
-            .then(data => {
-                if(data && data.error){
-                    setValues({...values, error: data.error, success: false});
-                }
-                else{
-                    setValues({
-                        ...values,
-                        name: "",
-                        email: "",
-                        password: "",
-                        confirmpassword: "",
-                        error: "",
-                        success: true
-                    });
-                }
-            })
-            .catch(err => console.log("error in signup"))
-    };
+        else {
+            signup({ name, email, password, confirmpassword })
+                .then(data => {
+                    if (data && data.error) {
+                        setValues({ ...values, error: data.error, success: false });
+                    }
+                    else {
+                        setValues({
+                            ...values,
+                            name: "",
+                            email: "",
+                            password: "",
+                            confirmpassword: "",
+                            error: "",
+                            success: true
+                        });
+                    }
+                })
+                .catch(err => console.log("error in signup"))
+        };
     }
 
     const signUpForm = () => {
-        return(
+        return (
             <div className="row">
                 <div className="col-md-4 offset-sm-4 text-left">
                     <form>
@@ -84,10 +84,10 @@ const Signup = ()  => {
     }
 
     const successMessage = () => {
-        return(
+        return (
             <div className="row">
                 <div className="col-md-4 offset-sm-4 text-left">
-                    <div className="alert alert-success" style={{display: success ? "" : "none"}}>
+                    <div className="alert alert-success" style={{ display: success ? "" : "none" }}>
                         New Account Created Successfully. Please <Link to="/signin">Login Here</Link>
                     </div>
                 </div>
@@ -96,10 +96,10 @@ const Signup = ()  => {
     }
 
     const errorMessage = () => {
-        return(
+        return (
             <div className="row">
                 <div className="col-md-4 offset-sm-4 text-left">
-                    <div className="alert alert-danger" style={{display: error ? "" : "none"}}>
+                    <div className="alert alert-danger" style={{ display: error ? "" : "none" }}>
                         {error}
                     </div>
                 </div>
@@ -108,10 +108,10 @@ const Signup = ()  => {
     }
 
     const alreadyHaveAccount = () => {
-        return(
+        return (
             <div className="row">
                 <div className="col-md-4 offset-sm-4 text-left">
-                    <div className="alert alert-info" style={{display: !success ? "" : "none"}}>
+                    <div className="alert alert-info" style={{ display: !success ? "" : "none" }}>
                         Already have an account? <Link to="/signin">Login Here</Link>
                     </div>
                 </div>
@@ -119,13 +119,13 @@ const Signup = ()  => {
         )
     }
 
-    return(
+    return (
         <Base title='Sign up page' description='Please register Here.'>
 
-        {alreadyHaveAccount()}
-        {successMessage()}
-        {errorMessage()}
-        {signUpForm()}
+            {alreadyHaveAccount()}
+            {successMessage()}
+            {errorMessage()}
+            {signUpForm()}
         </Base>
     )
 }

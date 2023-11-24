@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Base from '../core/Base';
 import { Link, Navigate } from 'react-router-dom';
 
-import { signin, authenticate, isAuthenticated } from '../auth/helper';
+import { signin, authenticate, isAuthenticated } from './helper/authapicall';
 
 const Signin = () => {
 
@@ -27,8 +27,8 @@ const Signin = () => {
         signin({ email, password })
             .then(data => {
                 console.log(data);
-                if (data && data.error) {
-                    setValues({ ...values, error: data.error, loading: false });
+                if (data && (data.err || data.error)) {
+                    setValues({ ...values, error: data.err || data.error, loading: false });
                 }
                 else {
                     authenticate(data, () => {
@@ -43,12 +43,12 @@ const Signin = () => {
     };
 
     const performRedirect = () => {
-        if(didRedirect){
+        if (didRedirect) {
             return <Navigate to="/" />
         }
-        if(isAuthenticated()){
+        if (isAuthenticated()) {
             return <Navigate to="/" />
-        } 
+        }
     }
 
     const signInForm = () => {
@@ -110,7 +110,7 @@ const Signin = () => {
         );
     }
 
-    return(
+    return (
         <Base title='Sign In Page' description='Please Sign In Here.'>
             {loadingMessage()}
             {errorMessage()}

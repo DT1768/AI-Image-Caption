@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import "../styles.css";
 import Base from './Base';
-import {searchByCaption} from './helper/captionapicall';
+import { searchByCaption } from './helper/captionapicall';
 import Card from './Card';
-import { isAuthenticated } from '../auth/helper';
+import { isAuthenticated } from '../auth/helper/authapicall';
 
 const Search = () => {
     const [images, setImages] = useState([]);
@@ -15,21 +15,21 @@ const Search = () => {
         loadAllImages();
     }
 
-    const {user,token} = isAuthenticated();
+    const { user, token } = isAuthenticated();
 
     const loadAllImages = () => {
-        searchByCaption(user._id,token,search)
-        .then(data => {
-            if(data.error){
-                setError(data.error);
-            }
-            else{
-                setImages(data);
-            }
-        })
+        searchByCaption(user._id, token, search)
+            .then(data => {
+                if (data.error) {
+                    setError(data.error);
+                }
+                else {
+                    setImages(data);
+                }
+            })
     }
 
-    return(
+    return (
         <Base title="Search" description="Search by Caption">
             <div className="container-fluid">
                 <form className="form-inline" onSubmit={handleSubmit}>
@@ -43,8 +43,9 @@ const Search = () => {
                 <div className="row">
                     {images.map((image, index) => {
                         return (
-                            <div key={index} className="col-3 mb-3">
+                            <div key={index} className="col-sm-3">
                                 <Card image={image} />
+                                <br />
                             </div>
                         );
                     })}
