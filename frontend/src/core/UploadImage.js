@@ -56,6 +56,7 @@ const UploadImage = () => {
                 } else {
                     // Set the image URL for display
                     setImageUrl(data.Location);
+                    setSaved(false);
                 }
             });
         }
@@ -82,6 +83,7 @@ const UploadImage = () => {
 
     const handleSaveCaption = (event) => {
         setLoading("Saving Caption...");
+        event.preventDefault();
         saveImage(user._id, token, imageUrl, caption)
             .then(data => {
                 setLoading("Image Saved to collection.");
