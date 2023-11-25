@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import AWS from "aws-sdk";
 import Base from "./Base";
 import { AWS_REGION, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_S3_BUCKET } from "../awsCredentials";
@@ -49,14 +49,13 @@ const UploadImage = () => {
 
             // Upload the image to S3
             s3.upload(params, (err, data) => {
-                setLoading("Image Uploaded.");
-
                 if (err) {
                     console.error('Error uploading image: ', err);
                 } else {
                     // Set the image URL for display
                     setImageUrl(data.Location);
                     setSaved(false);
+                    setLoading("Image Uploaded.");
                 }
             });
         }
@@ -95,6 +94,13 @@ const UploadImage = () => {
             )
     };
 
+    const cancelUpload = () => {
+        setFile(null);
+        setImageUrl('');
+        setCaption('');
+        setSaved(false);
+    }
+
     const imageForm = () => {
         return (
             <div className="row">
@@ -107,7 +113,12 @@ const UploadImage = () => {
                     <br />
                     <br />
                     {imageUrl && (
+                        <Fragment>
+                        <button className="btn-danger btn-danger col-12" style={{borderRadius: "8px"}} onClick={cancelUpload}>Cancel</button>
+                        <br />
+                        <br />
                         <img src={imageUrl} alt="Uploaded" width={"100%"} height={"100%"} style={{ maxHeight: "400px" }} />
+                        </Fragment>
                     )}
                     <br />
                     <br />
