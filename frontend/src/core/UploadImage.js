@@ -82,7 +82,6 @@ const UploadImage = () => {
 
     const handleSaveCaption = (event) => {
         setLoading("Saving Caption...");
-        event.preventDefault();
         saveImage(user._id, token, imageUrl, caption)
             .then(data => {
                 setLoading("Image Saved to collection.");
@@ -148,7 +147,6 @@ const UploadImage = () => {
     return (
         <div>
             <Base title="Upload Image Here" description="Caption will be generated using gpt-2 model.">
-
                 {imageForm()}
             </Base>
         </div>
