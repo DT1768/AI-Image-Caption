@@ -100,7 +100,7 @@ const UploadImage = () => {
             <div className="row">
                 <div className="col-md-4 offset-sm-4">
                     {loading && <p className="text">{loading}</p>}
-                    <input className="btn" type="file" accept="image/png, image/jpeg" onChange={handleImageChange} />
+                    <input className="btn btn-warning col-12" type="file" accept="image/png, image/jpeg" onChange={handleImageChange} />
                     <br />
                     <br />
                     <button className="btn btn-warning col-12" onClick={handleUpload} disabled={imageUrl}>Upload Image</button>
