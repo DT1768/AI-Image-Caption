@@ -34,6 +34,7 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env:
           CI : ""
+          REACT_APP_BACKEND_API: ${REACT_APP_BACKEND_API}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
