@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import AWS from "aws-sdk";
 import Base from "./Base";
 import { AWS_REGION, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_S3_BUCKET } from "../awsCredentials";
@@ -14,6 +14,8 @@ const UploadImage = () => {
     const [saved, setSaved] = useState(false);
 
     const { user, token } = isAuthenticated();
+
+    const inputFile = useRef(null);
 
 
 
@@ -99,6 +101,10 @@ const UploadImage = () => {
         setImageUrl('');
         setCaption('');
         setSaved(false);
+        if(inputFile.current){
+            inputFile.current.value = "";
+        }
+        setLoading('');
     }
 
     const imageForm = () => {
@@ -106,7 +112,7 @@ const UploadImage = () => {
             <div className="row">
                 <div className="col-md-4 offset-sm-4">
                     {loading && <p className="text">{loading}</p>}
-                    <input className="btn btn-warning col-12" type="file" accept="image/png, image/jpeg" onChange={handleImageChange} />
+                    <input className="btn btn-warning col-12" ref={inputFile} type="file" accept="image/png, image/jpeg" onChange={handleImageChange} />
                     <br />
                     <br />
                     <button className="btn btn-warning col-12" onClick={handleUpload} disabled={imageUrl}>Upload Image</button>

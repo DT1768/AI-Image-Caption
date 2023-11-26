@@ -111,8 +111,8 @@ const Signup = () => {
         return (
             <div className="row">
                 <div className="col-md-4 offset-sm-4 text-left">
-                    <div className="alert alert-info" style={{ display: !success ? "" : "none" }}>
-                        Already have an account? <Link to="/signin">Login Here</Link>
+                    <div className="alert" style={{ display: !success ? "" : "none" }}>
+                        Already have an account? <Link className='text' to="/signin">Click Here</Link> to Sign In
                     </div>
                 </div>
             </div>
